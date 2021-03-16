@@ -18,6 +18,9 @@ The cover image must compress well, such that the compressed filesize is less th
 palette, then it must have at least 257 unique colours (otherwise twitter will
 optimise it to use a palette).
 
+The resolution can be up to 4096x4096, however, be aware that twitter will serve
+a downscaled version by default, for images greater than 680x680 (depending on your display DPI, etc.).
+
 ## Embedded file requirements
 
 The total output file size must be less than 3MB (maybe 5MB?), otherwise
