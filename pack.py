@@ -41,6 +41,7 @@ while True:
 	
 	if chunk_type == b"IDAT":
 		idat_body += chunk_body
+		continue
 	
 	if chunk_type == b"IEND":
 		start_offset = png_out.tell()+8+len(idat_body)
