@@ -1,6 +1,8 @@
 # [tweetable-polyglot-png](https://github.com/DavidBuchanan314/tweetable-polyglot-png)
 Pack up to 3MB of data into a tweetable PNG polyglot file.
 
+See it in action here: https://twitter.com/David3141593/status/1371974874856587268
+
 ## How?
 
 Twitter strips unnecessary data from PNG uploads, however, they do not strip
