@@ -10,7 +10,7 @@ if len(sys.argv) != 4:
 # this function is gross
 def fixup_zip(data, start_offset):
 	end_central_dir_offset = data.rindex(b"PK\x05\x06")
-	cdent_count = unpack_from("<H", data, end_central_dir_offset+10)
+	cdent_count = unpack_from("<H", data, end_central_dir_offset+10)[0]
 	cd_range = slice(end_central_dir_offset+16, end_central_dir_offset+16+4)
 	central_dir_start_offset = int.from_bytes(data[cd_range], "little")
 	data[cd_range] = (central_dir_start_offset + start_offset).to_bytes(4, "little")
