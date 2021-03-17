@@ -29,28 +29,34 @@ png_header = png_in.read(len(PNG_MAGIC))
 assert(png_header == PNG_MAGIC)
 png_out.write(png_header)
 
-idat_count = 0
+idat_body = b""
 while True:
 	chunk_len = int.from_bytes(png_in.read(4), "big")
 	chunk_type = png_in.read(4)
 	chunk_body = png_in.read(chunk_len)
 	chunk_csum = int.from_bytes(png_in.read(4), "big")
 	
+	if chunk_type not in [b"IHDR", b"PLTE", b"IDAT", b"IEND"]:
+		exit("ERROR: non essential or unknown chunk: " + chunk_type.decode())
+	
 	if chunk_type == b"IDAT":
-		if idat_count:
-			exit("Only PNGs with a single IDAT chunk are currently supported.")
-		idat_count += 1
-		start_offset = png_in.tell()-4
-		content_dat = bytearray(content_in.read())
+		idat_body += chunk_body
+	
+	if chunk_type == b"IEND":
+		start_offset = png_out.tell()+8+len(idat_body)
 		print("Embedded file starts at offset", hex(start_offset))
+		
+		idat_body += content_in.read()
 		
 		if sys.argv[2].endswith(".zip"):
 			print("Fixing up zip offsets...")
-			fixup_zip(content_dat, start_offset)
+			idat_body = bytearray(idat_body)
+			fixup_zip(idat_body, start_offset)
 		
-		chunk_len += len(content_dat)
-		chunk_body += content_dat
-		chunk_csum = zlib.crc32(content_dat, chunk_csum)
+		png_out.write(len(idat_body).to_bytes(4, "big"))
+		png_out.write(b"IDAT")
+		png_out.write(idat_body)
+		png_out.write(zlib.crc32(b"IDAT" + idat_body).to_bytes(4, "big"))
 	
 	png_out.write(chunk_len.to_bytes(4, "big"))
 	png_out.write(chunk_type)

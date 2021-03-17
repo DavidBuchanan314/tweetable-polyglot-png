@@ -21,7 +21,7 @@ optimise it to use a palette).
 The resolution can be up to 4096x4096, however, be aware that twitter will serve
 a downscaled version by default, for images greater than 680x680 (depending on your display DPI, etc.).
 
-The image should not have any unecessary metadata chunks, or more than one IDAT chunk. I used these export settings in GIMP:
+The image should not have any unecessary metadata chunks. I used these export settings in GIMP:
 
 ![image](https://user-images.githubusercontent.com/13520633/111412860-1990ad00-86d5-11eb-9c2f-3a88db84fdf4.png)
 
