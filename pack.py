@@ -40,6 +40,10 @@ while True:
 		print("Warning: dropping non-essential or unknown chunk:", chunk_type.decode())
 		continue
 	
+	if chunk_type == b"IHDR":
+		width, height = unpack_from(">II", chunk_body)
+		print(f"Image size: {width}x{height}px")
+	
 	if chunk_type == b"IDAT":
 		idat_body += chunk_body
 		continue
@@ -49,6 +53,9 @@ while True:
 		print("Embedded file starts at offset", hex(start_offset))
 		
 		idat_body += content_in.read()
+		
+		if len(idat_body) > width * height:
+			exit("ERROR: Input files too big for cover image resolution.")
 		
 		if sys.argv[2].endswith(".zip"):
 			print("Fixing up zip offsets...")
