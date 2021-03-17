@@ -37,7 +37,8 @@ while True:
 	chunk_csum = int.from_bytes(png_in.read(4), "big")
 	
 	if chunk_type not in [b"IHDR", b"PLTE", b"IDAT", b"IEND"]:
-		exit("ERROR: non essential or unknown chunk: " + chunk_type.decode())
+		print("Warning: dropping non-essential or unknown chunk:", chunk_type.decode())
+		continue
 	
 	if chunk_type == b"IDAT":
 		idat_body += chunk_body
