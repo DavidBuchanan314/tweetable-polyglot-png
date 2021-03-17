@@ -25,3 +25,7 @@ a downscaled version by default, for images greater than 680x680 (depending on y
 
 The total output file size must be less than 3MB (maybe 5MB?), otherwise
 twitter will convert the PNG to a JPEG.
+
+If the embedded file is a `.zip`, then the offsets are automatically adjusted
+so that the overall file is still a valid zip. For any other file formats, you're
+on your own (many will work without any special handling, notably `.pdf`, `.mp3`).
