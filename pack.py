@@ -1,4 +1,5 @@
 import zlib
+from struct import unpack_from
 import sys
 
 PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
@@ -9,7 +10,7 @@ if len(sys.argv) != 4:
 # this function is gross
 def fixup_zip(data, start_offset):
 	end_central_dir_offset = data.rindex(b"PK\x05\x06")
-	cdent_count = int.from_bytes(data[end_central_dir_offset+10:end_central_dir_offset+10+2], "little")
+	cdent_count = unpack_from("<H", data, end_central_dir_offset+10)
 	cd_range = slice(end_central_dir_offset+16, end_central_dir_offset+16+4)
 	central_dir_start_offset = int.from_bytes(data[cd_range], "little")
 	data[cd_range] = (central_dir_start_offset + start_offset).to_bytes(4, "little")
@@ -28,6 +29,7 @@ png_header = png_in.read(len(PNG_MAGIC))
 assert(png_header == PNG_MAGIC)
 png_out.write(png_header)
 
+idat_count = 0
 while True:
 	chunk_len = int.from_bytes(png_in.read(4), "big")
 	chunk_type = png_in.read(4)
@@ -35,6 +37,9 @@ while True:
 	chunk_csum = int.from_bytes(png_in.read(4), "big")
 	
 	if chunk_type == b"IDAT":
+		if idat_count:
+			exit("Only PNGs with a single IDAT chunk are currently supported.")
+		idat_count += 1
 		start_offset = png_in.tell()-4
 		content_dat = bytearray(content_in.read())
 		print("Embedded file starts at offset", hex(start_offset))
