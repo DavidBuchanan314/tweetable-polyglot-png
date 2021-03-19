@@ -91,7 +91,7 @@ while True:
 		png_out.write(idat_body)
 		png_out.write(zlib.crc32(b"IDAT" + idat_body).to_bytes(4, "big"))
 	
-	# if we reacher here, we're writing the IHDR, PLTE or IEND chunk
+	# if we reached here, we're writing the IHDR, PLTE or IEND chunk
 	png_out.write(chunk_len.to_bytes(4, "big"))
 	png_out.write(chunk_type)
 	png_out.write(chunk_body)
