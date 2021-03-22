@@ -11,6 +11,8 @@ Other image hosts I've verified this technique to work on:
 
  - Github (https://repository-images.githubusercontent.com/348501512/06710f00-8886-11eb-95d1-3f416fa3853a)
 
+ - Discord (https://cdn.discordapp.com/attachments/464905259261755392/823171702170845199/06710f00-8886-11eb-95d1-3f416fa3853a.png)
+
 Image hosts I've confirmed it *doesn't* work on:
 
  - Reddit
