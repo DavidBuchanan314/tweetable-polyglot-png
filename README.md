@@ -1,21 +1,21 @@
 # [tweetable-polyglot-png](https://github.com/DavidBuchanan314/tweetable-polyglot-png)
 Pack up to 3MB of data into a tweetable PNG polyglot file.
 
-![image](https://pbs.twimg.com/media/Ewo7CpJW8AMjVZt?format=png&name=small)
-
 See it in action here: https://twitter.com/David3141593/status/1371974874856587268
+
+![image](https://pbs.twimg.com/media/Ewo7CpJW8AMjVZt?format=png&name=small)
 
 Other image hosts I've verified this technique to work on:
 
  - Imgur (https://i.imgur.com/kNhGrN3.png)
 
- - Github (https://repository-images.githubusercontent.com/348501512/06710f00-8886-11eb-95d1-3f416fa3853a)
+ - Github repo thumbnail/header image (https://repository-images.githubusercontent.com/348501512/06710f00-8886-11eb-95d1-3f416fa3853a)
 
- - Discord (https://cdn.discordapp.com/attachments/464905259261755392/823171702170845199/06710f00-8886-11eb-95d1-3f416fa3853a.png)
+ - Discord (Not a huge surprise, since they surport arbitrary files anyway) (https://cdn.discordapp.com/attachments/464905259261755392/823171702170845199/06710f00-8886-11eb-95d1-3f416fa3853a.png)
 
 Image hosts I've confirmed it *doesn't* work on:
 
- - Reddit
+ - Reddit (Perhaps it could be made to work by embedding data *within* the DEFLATE stream, rather than appending?)
 
 ## How?
 
