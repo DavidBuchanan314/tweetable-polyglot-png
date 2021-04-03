@@ -7,31 +7,6 @@ PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 if len(sys.argv) != 4:
 	print(f"USAGE: {sys.argv[0]} cover.png content.bin output.png")
 
-# this function is gross
-def fixup_zip(data, start_offset):
-
-	# find the "end of central directory" marker
-	end_central_dir_offset = data.rindex(b"PK\x05\x06")
-	
-	# find the number of central directory entries
-	cdent_count = unpack_from("<H", data, end_central_dir_offset+10)[0]
-	
-	# find the offset of the central directory entries, and fix it
-	cd_range = slice(end_central_dir_offset+16, end_central_dir_offset+16+4)
-	central_dir_start_offset = int.from_bytes(data[cd_range], "little")
-	data[cd_range] = (central_dir_start_offset + start_offset).to_bytes(4, "little")
-	
-	# iterate over the central directory entries
-	for _ in range(cdent_count):
-		central_dir_start_offset = data.index(b"PK\x01\x02", central_dir_start_offset)
-		
-		# fix the offset that points to the local file header
-		off_range = slice(central_dir_start_offset+42, central_dir_start_offset+42+4)
-		off = int.from_bytes(data[off_range], "little")
-		data[off_range] = (off + start_offset).to_bytes(4, "little")
-		
-		central_dir_start_offset += 1
-
 png_in = open(sys.argv[1], "rb")
 content_in = open(sys.argv[2], "rb")
 png_out = open(sys.argv[3], "wb")
@@ -83,7 +58,6 @@ while True:
 		if sys.argv[2].endswith(".zip"):
 			print("Fixing up zip offsets...")
 			idat_body = bytearray(idat_body)
-			fixup_zip(idat_body, start_offset)
 		
 		# write the IDAT chunk
 		png_out.write(len(idat_body).to_bytes(4, "big"))
