@@ -6,6 +6,7 @@ PNG_MAGIC = b"\x89PNG\r\n\x1a\n"
 
 if len(sys.argv) != 4:
 	print(f"USAGE: {sys.argv[0]} cover.png content.bin output.png")
+	exit()
 
 # this function is gross
 def fixup_zip(data, start_offset):
