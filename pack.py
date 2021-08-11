@@ -14,6 +14,12 @@ def fixup_zip(data, start_offset):
 	# find the "end of central directory" marker
 	end_central_dir_offset = data.rindex(b"PK\x05\x06")
 	
+	# adjust comment length so that any trailing data (i.e. PNG IEND)
+	# is part of the comment
+	comment_length = (len(data)-end_central_dir_offset) - 22 + 0x10
+	cl_range = slice(end_central_dir_offset+20, end_central_dir_offset+20+2)
+	data[cl_range] = comment_length.to_bytes(2, "little")
+	
 	# find the number of central directory entries
 	cdent_count = unpack_from("<H", data, end_central_dir_offset+10)[0]
 	
@@ -81,7 +87,7 @@ while True:
 			exit("ERROR: Input files too big for cover image resolution.")
 		
 		# if its a zip file, fix the offsets
-		if sys.argv[2].endswith(".zip"):
+		if sys.argv[2].split(".")[-1].lower() in ["zip", "jar"]:
 			print("Fixing up zip offsets...")
 			idat_body = bytearray(idat_body)
 			fixup_zip(idat_body, start_offset)
